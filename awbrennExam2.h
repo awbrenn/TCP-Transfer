@@ -1,5 +1,5 @@
 /*********************************************************
-File Name:  DNSClient.h
+File Name:  awbrennExam2.h
 Author:     Austin Brennan
 Course:     CPSC 3600
 Instructor: Sekou Remy
@@ -7,8 +7,7 @@ Due Date:   04/08/2015
 
 
 File Description:
-This file contains most of my includes and some defined
-constants.
+This file contains includes and #defines for my program.
 
 *********************************************************/
 
@@ -34,7 +33,4 @@ constants.
 #include <sys/types.h>
 #include <sys/stat.h>
 
-
-#define RECV_BUFF_SIZE 150000000     /* Longest string to server */
 #define MAX_PENDING 5
-#define HTTP_URL_SECTION 7

@@ -1,14 +1,15 @@
 /*********************************************************
-File Name:  httpClient.cpp
+File Name:  awbrennExam2.c
 Author:     Austin Brennan
 Course:     CPSC 3600
 Instructor: Sekou Remy
-Due Date:   03/25/2015
+Due Date:   04/08/2015
 
 
 File Description:
 This file contains an implementation of a simple
-http client. See readme.txt for more details.
+TCP client and server. It is capable of transfering
+a file.
 
 *********************************************************/
 
@@ -58,13 +59,10 @@ void readFile() {
     while ((c = fgetc(file)) != EOF) {
         FILE_CONTENTS[i++] = (char)c;
     }
-
-//    FILE_CONTENTS[i] = '\0';
 }
 
 
 void clientMain(int argc, char* argv[]) {
-//	printf("This is CLIENT\n");
     int message_len;
 	int sock;
     struct sockaddr_in serverAddr; /* Local address */
@@ -105,8 +103,6 @@ void clientMain(int argc, char* argv[]) {
     if (write(sock, &FILE_SIZE, sizeof(FILE_SIZE)) != (ssize_t) sizeof(FILE_SIZE))
         handleError((char *)"write() failed - wrote a different number of bytes than expected");
 
-//	printf("%s %zu\n",FILE_CONTENTS, FILE_SIZE);
-
 	/* Send the file contents to the server */
 	if (write(sock, FILE_CONTENTS, FILE_SIZE) != FILE_SIZE)
 		handleError((char *)"write() failed - wrote a different number of bytes than expected");
@@ -115,7 +111,6 @@ void clientMain(int argc, char* argv[]) {
 
 
 void serverMain(int argc, char* argv[]) {
-//	printf("This is SERVER\n");
 	int serverSock;
 	int file_descriptor;
     struct sockaddr_in serverAddr; /* Local address */
@@ -170,22 +165,20 @@ void serverMain(int argc, char* argv[]) {
 	        continue;
 	    }
 
-//	    printf("\nFile size is: %zu\n", FILE_SIZE);
-
 
 	    /* Malloc space for the new file*/
 	    FILE_CONTENTS = (char*)malloc(FILE_SIZE);
 	    size_t len;
 	    size_t total_read_bytes = 0;
+
 		/* Read the incoming file contents */
 		while (total_read_bytes != FILE_SIZE) {
 	    	len = (size_t) read(clientSock, FILE_CONTENTS+total_read_bytes, FILE_SIZE);
 	    	total_read_bytes += len;
 		}
-		//    printf("\nFILE CONTENTS:\n%s\n", FILE_CONTENTS);
+
 		/* create unique filename for the new file */
 		sprintf(filename_buffer, "%s%d.data",FILENAME,TOTAL_FILES_READ);
-//		printf("\n%s\n",filename_buffer);
 
 	    if ((file_descriptor = open(filename_buffer, O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH)) < 0) {
 			printf("open() failed could not open file - "
@@ -215,7 +208,4 @@ int main(int argc, char *argv[]) {
 	else
 		handleError((char*)"Invalid Flag - proper flag values are\n0 - meaning client\n"
 			"1 - meaning server");
-
 }
-
-
